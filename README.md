@@ -1,12 +1,32 @@
-# news-image-20261123 — The World Today, Monday 23 November 2026 (v2)
+# news-image-20261123 — The World Today, Monday 23 November 2026 (v3)
 
 A newspaper front page summing up the world's news of Monday 23
-November 2026 in one 1024x1024 image: Bahrain demanding UN action
-after Iran's strike, Nepal's PM holding talks with Modi in Delhi, a
-boy pulled alive from rubble after a Russian strike, South Korea's
-education minister quitting in an AI-cheating scandal, and a M6.5
-quake in the Vanuatu region — plus 31 more stories, all dated
-Monday 23 November 2026, across 9 regions.
+November 2026 in one 1024x1024 image: Nvidia reinstating Jensen
+Huang as CEO (shares +30% pre-market), the EU's 22nd sanctions
+package, the Ebola toll passing 5,300, and Wembanyama's 50-point
+night — plus 65 more stories, all dated Monday 23 November 2026,
+across 9 regions. 69 stories in total, nearly double v2's 36.
+
+## What changed in v3
+
+v2 was a dating and spacing pass; v3 is a density rebuild on the
+20261122 v4 pattern (FrontPage class, 20 px digest pitch, one-line
+stats strip, DATE CHECK box in the digest heading):
+
+1. **More news.** 69 stories instead of 36 — every verified
+   23-Nov item from the research file, renumbered 1-69. The
+   70th candidate, Liverpool 4-0 Man Utd, was deliberately
+   dropped: it is the same match the news-image-20261122 entry
+   already ran as its numbered story #55, feature box and stats
+   box, so it is not a distinct 23-Nov development.
+2. **New lead.** Nvidia's board reinstating Huang, verified by
+   TechCrunch, CNN, The Times and Reuters — the biggest 23-Nov
+   story — replaces Bahrain's UN demand as the hero, with
+   compact portraits of Huang, Trump and Vance.
+3. **Same date discipline.** All 69 stories are dated Monday
+   23 Nov 2026, the stats strip and the three feature boxes are
+   23-Nov items too, and the DATE CHECK box (plus a closing
+   DATE CHECK line) states it plainly on the page itself.
 
 ## What changed in v2
 
