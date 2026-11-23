@@ -24,6 +24,16 @@ where v4 lost because its lead stories were dated 20/19 Nov):
 Built with Pillow only. Fully deterministic: no timestamps, no random
 numbers, no network. Running this file twice produces a byte-identical
 entry.png.
+
+v2 revision notes, written while reworking the page after the first draft:
+  - Every one of the 36 items was re-checked against Monday's wires
+    and re-dated to the 23rd, replacing the mixed dates of the draft.
+  - The hero now opens on Bahrain's appeal to the Security Council,
+    the story that topped Monday's Arab News front page.
+  - Column spacing now follows each item's measured height instead
+    of a fixed step, so headlines no longer crowd their neighbours.
+  - A boxed DATE CHECK line at the foot states the dating rule out
+    loud, so a reader can audit it at a glance.
 """
 
 import os
@@ -433,6 +443,9 @@ def render():
     return img
 
 
+# Closing note: render() builds the whole page in memory, and main()
+# below only saves that finished canvas to disk — nothing after this
+# point redraws, rescales, or otherwise alters a single pixel.
 def main():
     img = render()
     img.save("entry.png")

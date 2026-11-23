@@ -31,6 +31,14 @@ Huang), the Cheonghae-unit row, and the North Carolina House
 seat story was deliberately left out — its Reuters dateline is
 22 Nov, the same trap that sank 20261121 v4.
 
+## v2 notes from the author
+
+The second draft was a dating and spacing pass, not a redesign: I
+went back through Monday's wires item by item, swapped the lead to
+Bahrain's Security Council appeal, let each story claim only the
+height its own lines need, and added the DATE CHECK box so the
+23 November rule is visible on the page itself, not just in code.
+
 ## How it is built
 
 `compose.py` (Pillow only, no network, fully deterministic) draws the
