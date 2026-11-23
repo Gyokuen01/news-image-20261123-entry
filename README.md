@@ -94,6 +94,14 @@ python3 compose.py            # writes entry.png (1024x1024, < 1 MiB)
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 ```
 
+## Photos (v4)
+
+Eight generated editorial photos in `photos/`, all without baked-in
+text: the Nvidia keynote hero (story 25), EU sanctions (34), Ebola
+response (49), Wembanyama (68), COP31 Antalya (1), Kospi ticker
+(41), Seattle ICE (31) and Wolves–Arsenal (63). Each photo is
+captioned on the page with its story number.
+
 ## Sources
 
 Reuters, AP, Al Jazeera, AFP, UN, BBC, USGS, Arab News — all stories

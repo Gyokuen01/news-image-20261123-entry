@@ -36,6 +36,19 @@ program reads no clock, no random source and no network, and the
 photos are fixed files, so two runs write the same bytes. The
 layout is driven by one FrontPage object that owns the canvas,
 the palette and the fonts; each section of the page is one method.
+
+Photo map (v4): eight generated editorial pictures, none carrying
+baked-in text, each captioned on the page with its story number.
+The hero keynote (story 25) shows the Nvidia auditorium where
+Huang returned as CEO. The three feature photos are the EU flag
+and Brussels glass (story 34, 22nd sanctions), health workers in
+protective gear (story 49, Ebola in DR Congo) and a Wembanyama
+dunk (story 68, 50 points). The four-photo strip between the
+features and the digest holds Antalya delegates (story 1), the
+Seoul ticker wall (story 41, Kospi slide), a US arrivals hall
+(story 31, Seattle ICE row) and a night match under lights
+(story 63, Wolves 2-2 Arsenal). Every photo is a fixed file in
+photos/, so the render stays deterministic.
 """
 
 import os
@@ -122,6 +135,15 @@ def wrap(draw, text, font, max_w):
 # 69 stories, all dated Monday 23 November 2026. Headlines stay under
 # 36 characters and details under 42 so each story fits one line each
 # at the digest type sizes (bold 10 / plain 8 across 287 px).
+# Sourcing rule for this page: a story counts when it was published
+# or first reported on Monday 23 November 2026, checked against a
+# live outlet (Reuters, AP, CNN, BBC, Al Jazeera, AFP, UN, USGS,
+# Arab News). Weekend events reported on the Monday count under the
+# same rule the v2 entry used. The COP31 items here are 23-Nov
+# follow-ups (Erdogan, Breakingviews, India), not the 22-Nov
+# collapse itself. Two claims were dropped in research for failing
+# verification: a wrong Newcastle-Arsenal scoreline and two scores
+# that only existed on fan graphics.
 STORY_COLUMNS = [
     [
         ("CLIMATE", [
@@ -293,6 +315,13 @@ STAT_LINE = ("NVIDIA: +30%  •  KOSPI: -3.3%  •  SK HYNIX: -13%  •  "
 
 
 # ------------------------------------------------------------------ pictures
+# Photo strip (v4): four photos sit between the feature boxes and
+# the digest heading at y=400-446, 52 px of vertical space, each
+# with a navy caption bar carrying its story number and a short
+# label. The strip is what forced the digest pitch down from 20 px
+# to 18 px; the detail line stays 10 px below its headline, and the
+# render asserts every headline and detail still fits one line, so
+# the tighter pitch never wraps or overlaps text.
 # v4: the hero's three cartoon portraits are gone — the lead story
 # now carries a real keynote photo (see FrontPage.photo in the page
 # section below), so no drawn portraits remain in this file.
