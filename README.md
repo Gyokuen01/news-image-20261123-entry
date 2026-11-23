@@ -102,6 +102,14 @@ response (49), Wembanyama (68), COP31 Antalya (1), Kospi ticker
 (41), Seattle ICE (31) and Wolves–Arsenal (63). Each photo is
 captioned on the page with its story number.
 
+## Layout
+
+The digest runs at an 18 px pitch with the detail 10 px below its
+headline; region headers cost 14 px. The photo strip sits between
+the feature boxes and the digest heading. Headlines stay under 36
+characters and details under 42, so every story fits one line each
+and the render asserts both instead of shipping wrapped text.
+
 ## Sources
 
 Reuters, AP, Al Jazeera, AFP, UN, BBC, USGS, Arab News — all stories

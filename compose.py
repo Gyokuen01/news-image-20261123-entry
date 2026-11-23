@@ -548,6 +548,12 @@ class FrontPage:
 # Closing note: render() builds the whole page in memory, and main()
 # below only saves that finished canvas to disk — nothing after this
 # point redraws, rescales, or otherwise alters a single pixel.
+# Rendering notes: the page is drawn once, top to bottom, in this
+# order — masthead, date band, stats strip, hero, feature boxes,
+# photo strip, digest heading, digest columns, sources, footer.
+# Fonts come from the local DejaVu files through _load_ttf; no web
+# font is fetched, so the render works offline and the same bytes
+# come out on any machine with the same Pillow version.
 def render():
     return FrontPage().build()
 
