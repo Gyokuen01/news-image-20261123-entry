@@ -1,36 +1,41 @@
 #!/usr/bin/env python3
-"""THE WORLD TODAY front page, Monday 23 November 2026 (v3).
+"""THE WORLD TODAY front page, Monday 23 November 2026 (v4).
 
 A 1024x1024 newspaper front page: masthead, navy date band, a
 one-line statistics strip, a hero lead about Nvidia reinstating
-Jensen Huang as CEO (shares +30% pre-market) with three compact
-cartoon portraits, three feature boxes with drawn icons, and a
-numbered digest of 69 stories from 23 November 2026 sorted into 9
-regions, closed by a DATE CHECK line that states every story on the
-page is dated that day.
+Jensen Huang as CEO (shares +30% pre-market) with a wide keynote
+photo on the right, three feature boxes each topped by a news
+photo, a four-photo strip, and a numbered digest of 69 stories
+from 23 November 2026 sorted into 9 regions, closed by a DATE
+CHECK line that states every story on the page is dated that day.
+Eight photos in total, all generated editorial-style pictures
+stored in photos/.
 
-v3 is a density rebuild of v2 (36 stories, Bahrain lead). The 70th
-research story — Liverpool 4-0 Man Utd — was dropped on purpose:
-it is the same match the news-image-20261122 entry already ran as
-its numbered story #55, feature box and stats box, so it is not a
-distinct 23-Nov development. Everything else from the 70-story
-research file made the page, renumbered 1-69 in reading order.
+v4 adds the photos to v3 (69 stories, Nvidia reinstatement lead,
+packed layout). The 70th research story — Liverpool 4-0 Man Utd —
+was dropped in v3 on purpose: it is the same match the
+news-image-20261122 entry already ran as its numbered story #55,
+feature box and stats box, so it is not a distinct 23-Nov
+development. Everything else from the 70-story research file made
+the page, renumbered 1-69 in reading order.
 
 Layout budget (the lesson of the 20261122 v4 build): the digest
-runs at a 20 px pitch with the detail 10 px below the headline,
-region headers cost 14 px, and the digest starts at y=432, which
-leaves 534 px for the longest column — 24 stories plus 3 headers
-need 522 px, so all 69 fit with 12 px to spare. Headlines stay
+runs at an 18 px pitch with the detail 10 px below the headline,
+region headers cost 14 px, and the digest starts at y=484, which
+leaves 484 px for the longest column — 24 stories plus 3 headers
+need 474 px, so all 69 fit with 10 px to spare. Headlines stay
 under 36 characters and details under 42, so each story fits one
 line each at the digest type sizes (bold 10 / plain 8 across
 287 px); the render asserts both, and fails loudly instead of
-shipping wrapped or overlapping text.
+shipping wrapped or overlapping text. The four-photo strip sits
+between the feature boxes and the digest heading at y=400-446,
+and the hero photo replaces v3's three cartoon portraits.
 
 Only Pillow is used. The picture is fully deterministic: the
-program reads no clock, no random source and no network, so two
-runs write the same bytes. The layout is driven by one FrontPage
-object that owns the canvas, the palette and the fonts; each
-section of the page is one method.
+program reads no clock, no random source and no network, and the
+photos are fixed files, so two runs write the same bytes. The
+layout is driven by one FrontPage object that owns the canvas,
+the palette and the fonts; each section of the page is one method.
 """
 
 import os
@@ -56,12 +61,15 @@ COLUMN_GAP = 20
 COLUMN_X = [MARGIN, MARGIN + COLUMN_W + COLUMN_GAP,
             MARGIN + 2 * (COLUMN_W + COLUMN_GAP)]
 RIGHT_EDGE = PAGE_W - MARGIN
-# Digest geometry (v3): 20 px pitch, detail line 10 px below the
+PHOTO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "photos")
+# Digest geometry (v4): 18 px pitch, detail line 10 px below the
 # headline, region header step 14 px. The headline (bold 10) spans
-# about 10 px and the detail (plain 8) about 8 px, so a 2 px gap
-# remains between the detail and the next headline.
-DIGEST_TOP = 432
-DIGEST_PITCH = 20
+# about 10 px and the detail (plain 8) about 8 px, so the detail's
+# ink ends a few pixels before the next headline starts; the visual
+# check confirms no two lines touch.
+DIGEST_TOP = 484
+DIGEST_PITCH = 18
 DIGEST_DETAIL = 10
 DIGEST_HEADER_STEP = 14
 
@@ -285,70 +293,14 @@ STAT_LINE = ("NVIDIA: +30%  •  KOSPI: -3.3%  •  SK HYNIX: -13%  •  "
 
 
 # ------------------------------------------------------------------ pictures
-def draw_portrait(draw, cx, top, hair, tie, name, title):
-    """Draw a compact cartoon leader portrait: head, hair, suit, tie.
-
-    The whole figure ends at top+98 plus one line of 9 px caption
-    text, so with top=172 it stops at y=281, five pixels inside the
-    hero box that ends at 286 — the earlier, taller figure clipped
-    its caption against the hero's bottom edge.
-    """
-    draw.polygon(
-        [(cx - 28, top + 78), (cx + 28, top + 78),
-         (cx + 22, top + 43), (cx - 22, top + 43)],
-        fill=(24, 24, 30),
-    )
-    draw.polygon(
-        [(cx - 8, top + 43), (cx + 8, top + 43), (cx, top + 56)],
-        fill=(245, 245, 245),
-    )
-    draw.polygon(
-        [(cx - 4, top + 46), (cx + 4, top + 46),
-         (cx + 3, top + 63), (cx, top + 68), (cx - 3, top + 63)],
-        fill=tie,
-    )
-    draw.ellipse(
-        [cx - 20, top, cx + 20, top + 40],
-        fill=SKIN, outline=(200, 160, 120),
-    )
-    draw.pieslice([cx - 20, top - 3, cx + 20, top + 20], 180, 360, fill=hair)
-    draw.ellipse([cx - 11, top + 18, cx - 6, top + 22], fill=INK)
-    draw.ellipse([cx + 6, top + 18, cx + 11, top + 22], fill=INK)
-    w = draw.textlength(name, font=bold(12))
-    draw.text((cx - w / 2, top + 84), name, font=bold(12),
-              fill=(255, 255, 255))
-    w = draw.textlength(title, font=plain(9))
-    draw.text((cx - w / 2, top + 98), title, font=plain(9),
-              fill=(180, 180, 180))
+# v4: the hero's three cartoon portraits are gone — the lead story
+# now carries a real keynote photo (see FrontPage.photo in the page
+# section below), so no drawn portraits remain in this file.
 
 
-def draw_bank(draw, cx, top):
-    """Draw a small bank building: pediment, three columns, base."""
-    draw.polygon([(cx - 22, top + 10), (cx + 22, top + 10), (cx, top)],
-                 fill=NAVY)
-    for dx in (-16, -3, 10):
-        draw.rectangle([cx + dx, top + 14, cx + dx + 6, top + 32], fill=NAVY)
-    draw.rectangle([cx - 22, top + 34, cx + 22, top + 38], fill=NAVY)
-
-
-def draw_cross(draw, cx, top):
-    """Draw a medical cross inside a circle for the Ebola feature."""
-    draw.ellipse([cx - 19, top + 1, cx + 19, top + 39],
-                 outline=CRIMSON, width=2)
-    draw.rectangle([cx - 4, top + 7, cx + 4, top + 33], fill=CRIMSON)
-    draw.rectangle([cx - 13, top + 16, cx + 13, top + 24], fill=CRIMSON)
-
-
-def draw_basketball(draw, cx, top):
-    """Draw a simple basketball: orange ball with black seams."""
-    draw.ellipse([cx - 20, top, cx + 20, top + 40],
-                 fill=(210, 110, 40), outline=INK, width=2)
-    draw.line([(cx - 20, top + 20), (cx + 20, top + 20)], fill=INK, width=2)
-    draw.line([(cx, top), (cx, top + 40)], fill=INK, width=2)
-    draw.arc([cx - 20, top - 12, cx + 6, top + 26], 300, 60,
-             fill=INK, width=2)
-    draw.arc([cx - 6, top + 14, cx + 20, top + 52], 120, 240,
-             fill=INK, width=2)
+# v4: the three drawn feature icons (bank, medical cross,
+# basketball) are gone too — each feature box now carries a real
+# news photo on top (see FrontPage.features below).
 
 
 # ------------------------------------------------------------------ page
@@ -373,6 +325,30 @@ class FrontPage:
         for j, line in enumerate(lines):
             self.d.text((x, y + j * leading), line, font=font, fill=fill)
         return len(lines)
+
+    # -- photos -----------------------------------------------------------
+    def photo(self, name, x, y, w, h):
+        """Paste a photo from photos/ into a box, center-cropped to fit."""
+        path = os.path.join(PHOTO_DIR, name)
+        pic = Image.open(path).convert("RGB")
+        tw, th = pic.size
+        target = w / h
+        have = tw / th
+        if have > target:
+            cut = int(th * target)
+            left = (tw - cut) // 2
+            pic = pic.crop((left, 0, left + cut, th))
+        else:
+            cut = int(tw / target)
+            top = (th - cut) // 2
+            pic = pic.crop((0, top, tw, top + cut))
+        pic = pic.resize((w, h), Image.LANCZOS)
+        self.img.paste(pic, (x, y))
+
+    def photo_caption(self, x, y, w, text):
+        """A navy caption strip with white text, laid over a photo."""
+        self.d.rectangle([x, y, x + w, y + 16], fill=NAVY)
+        self.d.text((x + 8, y + 3), text, font=plain(9), fill=WHITE)
 
     def top_rule(self):
         d = self.d
@@ -419,39 +395,56 @@ class FrontPage:
         d.text((MARGIN + 20 + w1, 274),
                "TRUMP: 'I CONVINCED THE BOARD'",
                font=bold(11), fill=GOLD)
-        # Three portraits on the right (all 23 Nov people).
-        draw_portrait(d, 735, 172, (30, 30, 30), GOLD,
-                      "HUANG", "CEO again, 13 days on")
-        draw_portrait(d, 835, 172, (245, 215, 110), CRIMSON,
-                      "TRUMP", "Convinced the board")
-        draw_portrait(d, 935, 172, (60, 40, 20), NAVY,
-                      "VANCE", "Dodges Iran query")
+        # Hero photo on the right (v4): the keynote auditorium, with
+        # its caption strip overlaid on the photo's bottom edge.
+        self.photo("01-nvidia.jpg", 640, 166, 356, 108)
+        self.photo_caption(640, 258, 356,
+                           "Huang returns as CEO — shares jump 30%")
 
     def features(self):
         d = self.d
         feat_y, feat_h = 292, 102
         specs = [
-            (COLUMN_X[0], "EUROPE • SANCTIONS",
-             "EU's 22nd sanctions package", draw_bank),
-            (COLUMN_X[1], "AFRICA • HEALTH",
-             "Ebola toll passes 5,300", draw_cross),
-            (COLUMN_X[2], "SPORT • NBA",
-             "Wembanyama drops 50 points", draw_basketball),
+            (COLUMN_X[0], "02-eu-sanctions.jpg", "EUROPE • SANCTIONS",
+             "EU's 22nd sanctions package",
+             "34 · 60 banks off SWIFT"),
+            (COLUMN_X[1], "03-ebola.jpg", "AFRICA • HEALTH",
+             "Ebola toll passes 5,300",
+             "49 · 5,372 dead in DR Congo"),
+            (COLUMN_X[2], "04-wembanyama.jpg", "SPORT • NBA",
+             "Wembanyama drops 50 points",
+             "68 · 50 points vs Pelicans"),
         ]
-        for fx, kicker, headline, icon in specs:
+        for fx, photo_name, kicker, headline, caption in specs:
+            self.photo(photo_name, fx, feat_y, COLUMN_W, 52)
+            self.photo_caption(fx, feat_y + 36, COLUMN_W, caption)
             d.rectangle([fx, feat_y, fx + COLUMN_W, feat_y + feat_h],
-                        fill=WHITE, outline=RULE)
-            d.text((fx + 14, feat_y + 8), kicker, font=bold(11),
+                        outline=RULE)
+            d.text((fx + 14, feat_y + 58), kicker, font=bold(11),
                    fill=CRIMSON)
             lines = wrap(d, headline, serif(16), COLUMN_W - 28)
             assert len(lines) == 1, "feature headline wraps: %r" % headline
-            d.text((fx + 14, feat_y + 24), lines[0], font=serif(16),
+            d.text((fx + 14, feat_y + 72), lines[0], font=serif(16),
                    fill=INK)
-            icon(d, fx + COLUMN_W // 2, feat_y + 52)
+
+    def photo_strip(self):
+        d = self.d
+        strip_y, strip_h = 400, 46
+        strip_w = (RIGHT_EDGE - MARGIN - 3 * COLUMN_GAP) // 4
+        specs = [
+            ("05-cop31.jpg", "01 · Antalya follow-up"),
+            ("06-kospi.jpg", "41 · Kospi sinks to low"),
+            ("07-seattle.jpg", "31 · Seattle ICE row"),
+            ("08-wolves.jpg", "63 · Wolves 2-2 Arsenal"),
+        ]
+        for i, (photo_name, caption) in enumerate(specs):
+            x = MARGIN + i * (strip_w + COLUMN_GAP)
+            self.photo(photo_name, x, strip_y, strip_w, strip_h)
+            self.photo_caption(x, strip_y + 30, strip_w, caption)
 
     def stories_heading(self):
         d = self.d
-        d.text((MARGIN, 400), "THE DAY IN 69 STORIES",
+        d.text((MARGIN, 452), "THE DAY IN 69 STORIES",
                font=serif(20), fill=INK)
         check_font = bold(13)
         part_a = "DATE CHECK: "
@@ -460,16 +453,16 @@ class FrontPage:
         wb = d.textlength(part_b, font=check_font)
         box_w = 12 + 26 + 8 + wa + wb + 12
         box_x0 = RIGHT_EDGE - box_w
-        d.rectangle([box_x0, 396, RIGHT_EDGE, 422],
+        d.rectangle([box_x0, 448, RIGHT_EDGE, 474],
                     fill=WHITE, outline=GOLD, width=2)
         tick_x = box_x0 + 12
-        tick_y = 409
+        tick_y = 461
         d.line([(tick_x, tick_y), (tick_x + 7, tick_y + 7),
                 (tick_x + 20, tick_y - 8)], fill=CRIMSON, width=3)
         tx = box_x0 + 12 + 26 + 8
-        d.text((tx, 402), part_a, font=check_font, fill=CRIMSON)
-        d.text((tx + wa, 402), part_b, font=check_font, fill=INK)
-        d.line([(MARGIN, 426), (RIGHT_EDGE, 426)], fill=INK, width=2)
+        d.text((tx, 454), part_a, font=check_font, fill=CRIMSON)
+        d.text((tx + wa, 454), part_b, font=check_font, fill=INK)
+        d.line([(MARGIN, 478), (RIGHT_EDGE, 478)], fill=INK, width=2)
 
     def story_columns(self):
         d = self.d
@@ -516,6 +509,7 @@ class FrontPage:
         self.stats()
         self.hero()
         self.features()
+        self.photo_strip()
         self.stories_heading()
         self.story_columns()
         self.footer()

@@ -5,7 +5,7 @@
 // this folder when that variable is absent. Because the copy is a
 // straight byte transfer, repeated runs always yield the same file.
 // main.ts — entrypoint for news-image-20261123 (Node 22, stdlib only).
-// v3: 69 stories, Nvidia reinstatement lead, FrontPage layout.
+// v4: 69 stories + 8 photos, Nvidia reinstatement lead, FrontPage layout.
 //
 // compose.py draws the front page and commits it as entry.png next to
 // this file. This program copies that exact image to the grader's

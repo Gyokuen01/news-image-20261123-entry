@@ -1,4 +1,4 @@
-# news-image-20261123 — The World Today, Monday 23 November 2026 (v3)
+# news-image-20261123 — The World Today, Monday 23 November 2026 (v4)
 
 A newspaper front page summing up the world's news of Monday 23
 November 2026 in one 1024x1024 image: Nvidia reinstating Jensen
@@ -6,6 +6,28 @@ Huang as CEO (shares +30% pre-market), the EU's 22nd sanctions
 package, the Ebola toll passing 5,300, and Wembanyama's 50-point
 night — plus 65 more stories, all dated Monday 23 November 2026,
 across 9 regions. 69 stories in total, nearly double v2's 36.
+Eight generated editorial photos illustrate the lead and seven
+other stories on the page.
+
+## What changed in v4
+
+v3 was the density rebuild; v4 adds the photos, on the 20261122
+v4 pattern (hero photo, three feature photos, four-photo strip):
+
+1. **Hero photo.** The keynote auditorium (story 25) replaces
+   v3's three cartoon portraits of Huang, Trump and Vance, with a
+   caption strip overlaid on the photo's bottom edge.
+2. **Feature photos.** The EU sanctions bank, the Ebola cross and
+   the basketball icons are gone — each feature box now carries a
+   real photo (stories 34, 49, 68) with a story-numbered caption.
+3. **Photo strip.** Four more photos sit between the feature boxes
+   and the digest heading: Antalya follow-up (01), Kospi sinks
+   (41), Seattle ICE row (31) and Wolves 2-2 Arsenal (63).
+4. **Tighter digest.** The strip costs 52 px of vertical room, so
+   the digest pitch drops from 20 px to 18 px (detail line still
+   10 px below the headline) and the digest starts at y=484 — the
+   longest column still fits with 10 px to spare, and the visual
+   check confirms no two digest lines touch.
 
 ## What changed in v3
 
